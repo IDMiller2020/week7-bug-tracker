@@ -1,13 +1,12 @@
 import BaseController from '../utils/BaseController'
 import { Auth0Provider } from '@bcwdev/auth0provider'
-import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 
-export class BugsController extends BaseController {
+export class NotesController extends BaseController {
   constructor() {
-    super('api/bugs')
+    super('api/notes')
     this.router
       .get('', this.getAll)
-      .get('/:id', this.getById)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.create)
@@ -17,7 +16,7 @@ export class BugsController extends BaseController {
   async edit(req, res, next) {
     try {
       req.body.id = req.params.id
-      const data = await bugsService.edit(req.body)
+      const data = await notesService.edit(req.body)
       return res.send(data)
     } catch (error) {
       next(error)
@@ -26,17 +25,7 @@ export class BugsController extends BaseController {
 
   async getAll(req, res, next) {
     try {
-      const data = await bugsService.getAll()
-      return res.send(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async getById(req, res, next) {
-    try {
-      req.body.id = req.params.id
-      const data = await bugsService.getById(req.body)
+      const data = await notesService.getAll()
       return res.send(data)
     } catch (error) {
       next(error)
@@ -47,7 +36,7 @@ export class BugsController extends BaseController {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorId = req.userInfo.id
-      const data = await bugsService.create(req.body)
+      const data = await notesService.create(req.body)
       res.send(data)
     } catch (error) {
       next(error)

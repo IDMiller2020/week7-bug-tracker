@@ -3,9 +3,10 @@ const Schema = mongoose.Schema
 
 const Bug = new Schema(
   {
-    closed: { type: Boolean, required: true },
+    closed: { type: Boolean, required: true, default: false },
     title: { type: String, required: true },
     description: { type: String, required: true },
+    closedDate: { type: Date },
     creatorId: { type: String, ref: 'Account', required: true }
   },
   { timestamps: true, toJSON: { virtuals: true } }
