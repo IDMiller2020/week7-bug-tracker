@@ -4,7 +4,7 @@
       <div class="d-flex flex-column align-items-center">
         <img
           alt="logo"
-          src="../assets/img/cw-logo.png"
+          src="../assets/img/bug-logo.jpg"
           height="45"
         />
       </div>
@@ -24,7 +24,7 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link :to="{ name: 'Home' }" class="nav-link">
-            Home
+            Bug Log
           </router-link>
         </li>
         <li class="nav-item">

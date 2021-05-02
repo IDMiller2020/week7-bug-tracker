@@ -2,12 +2,12 @@
   <header>
     <Navbar />
   </header>
-  <main>
+  <main class="container-fluid">
     <router-view />
   </main>
   <footer>
     <div class="bg-dark text-light text-center p-4">
-      Made with 💖 by CodeWorks
+      Scott Miller | May 2nd, 2021
     </div>
   </footer>
 </template>

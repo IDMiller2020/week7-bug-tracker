@@ -6,31 +6,12 @@ export class NotesController extends BaseController {
   constructor() {
     super('api/notes')
     this.router
-      .get('', this.getAll)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.create)
-      .put('/:id', this.edit)
   }
 
-  async edit(req, res, next) {
-    try {
-      req.body.id = req.params.id
-      const data = await notesService.edit(req.body)
-      return res.send(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async getAll(req, res, next) {
-    try {
-      const data = await notesService.getAll()
-      return res.send(data)
-    } catch (error) {
-      next(error)
-    }
-  }
+  // NOTE getNotesByBugId is in the BugsController so that we can get all notes for a specific bug.
 
   async create(req, res, next) {
     try {
