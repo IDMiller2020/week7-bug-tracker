@@ -12,11 +12,11 @@ class BugsService {
   }
 
   async getAll() {
-    return await dbContext.Bugs.find()
+    return await dbContext.Bugs.find({}).populate('creator', 'name email picture')
   }
 
   async getById(query) {
-    const bug = await dbContext.Bugs.findById(query.id)
+    const bug = await dbContext.Bugs.findById(query.id).populate('creator')
     if (!bug) {
       throw new BadRequest('Invalid Id')
     }
@@ -25,11 +25,7 @@ class BugsService {
 
   async edit(body) {
     const bug = await dbContext.Bugs.findById(body.id)
-    if (!bug) { throw new BadRequest('Bug does not exist.') }
-    if (bug.closed) { throw new BadRequest('This bug is closed and can not be edited.') }
-    if (bug.closed !== body.closed && body.closed != null) {
-      throw new BadRequest('Unable to edit closed property.  Please use Close button to close this bug.')
-    } else {
+    if (bug.closed) { throw new BadRequest('This bug is closed and can not be edited.') } else {
       const data = await dbContext.Bugs.findOneAndUpdate(
         { _id: body.id }, body, { new: true }
       )

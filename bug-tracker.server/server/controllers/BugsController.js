@@ -20,6 +20,7 @@ export class BugsController extends BaseController {
   async edit(req, res, next) {
     try {
       req.body.id = req.params.id
+      delete req.body.closed
       const data = await bugsService.edit(req.body)
       return res.send(data)
     } catch (error) {
