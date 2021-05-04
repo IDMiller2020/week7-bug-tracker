@@ -17,6 +17,7 @@ export class BugsController extends BaseController {
       .delete('/:id', this.closeBugById)
   }
 
+  // FIXME pass the userInfo to validate the author like Kanban
   async edit(req, res, next) {
     try {
       req.body.id = req.params.id
@@ -69,6 +70,7 @@ export class BugsController extends BaseController {
     }
   }
 
+  // FIXME pass the userInfo to validate the author like Kanban
   async closeBugById(req, res, next) {
     try {
       const data = await bugsService.close({ bugId: req.params.id })

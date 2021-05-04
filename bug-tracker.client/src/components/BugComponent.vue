@@ -4,9 +4,8 @@
     <router-link :to="{name: 'BugDetails', params: { id: bug.id }}">
       <div class="card shadow">
         <div class="card-body">
-          <p class="card-title">
-            <!-- FIXME Date Format -->
-            {{ bug.title }} | {{ bug.creator.name }} | {{ bug.closed }} | {{ new Date(bug.updatedAt).toLocaleString() }}
+          <p class="card-title" v-if="bug.creator">
+            {{ bug.title }} | <img class="w-1 rounded-circle" :src="bug.creator.picture" alt="creator picture">{{ bug.creator.name }} | {{ bug.closed }} | {{ new Date(bug.updatedAt).toLocaleString() }}
           </p>
         </div>
       </div>
@@ -31,5 +30,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.w-1 {
+  width: 2rem;
+}
 </style>

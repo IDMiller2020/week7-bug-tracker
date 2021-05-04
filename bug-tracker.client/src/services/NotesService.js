@@ -1,19 +1,18 @@
 import { AppState } from '../AppState.js'
-import router from '../router'
+import { logger } from '../utils/Logger.js'
 import { api } from './AxiosService.js'
 
 class NotesService {
   async getNoteByBugId(id) {
-    const res = await api.get('api/notes/' + id)
-    AppState.activeNote = res.data
+    const res = await api.get('api/bugs/' + id + '/notes')
+    AppState.activeNotes = res.data
+    logger.log(res.data)
   }
 
-  async createNote(newNote) {
-    const res = await api.post('api/notes', newNote)
+  async createNote(body) {
+    const res = await api.post('api/notes', body)
     AppState.notes.push(res.data)
-    console.log(res.data)
-    // everytime a note is created, we will change pages
-    router.push({ name: 'NoteDetails', params: { id: res.data.id } })
+    logger.log(res.data)
   }
 
   async closeNote(id) {

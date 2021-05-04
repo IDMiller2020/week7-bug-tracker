@@ -11,7 +11,7 @@ class NotesService {
   }
 
   async findById(query) {
-    const note = await dbContext.Notes.find(query)
+    const note = await dbContext.Notes.find(query).populate('creator')
     if (!note) {
       throw new BadRequest('Invalid Id')
     }

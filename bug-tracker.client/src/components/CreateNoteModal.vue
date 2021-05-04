@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade"
-       id="new-bug-form"
+       id="new-note-form"
        tabindex="-1"
        role="dialog"
        aria-labelledby="exampleModalLabel"
@@ -10,37 +10,25 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            New Bug
+            New Note
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form @submit.prevent="createBug">
+        <form @submit.prevent="createNote">
           <div class="modal-body">
             <div class="form-group">
-              <label for="make">Title</label>
+              <label for="note">Note</label>
               <input type="text"
                      class="form-control"
-                     id="title"
-                     placeholder="title..."
-                     minLength="3"
-                     maxlength="25"
-                     v-model="state.newBug.title"
+                     id="note"
+                     placeholder="note..."
+                     minLength="5"
+                     maxlength="200"
+                     v-model="state.newNote.body"
                      required
               >
-              <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text"
-                       class="form-control"
-                       id="description"
-                       placeholder="Description..."
-                       minlength="3"
-                       maxlength="75"
-                       v-model="state.newBug.description"
-                       required
-                >
-              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -59,30 +47,34 @@
 
 <script>
 import { reactive } from 'vue'
-import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 import $ from 'jquery'
+// import { AppState } from '../AppState'
+import { useRoute } from 'vue-router'
 export default {
-  name: 'Component',
+  // name: 'Component',
   setup() {
+    const route = useRoute()
     const state = reactive({
-      newBug: {}
+      newNote: {}
     })
     return {
       state,
-      async createBug() {
+      async createNote() {
         try {
-          await bugsService.createBug(state.newBug)
+          state.newNote.bugId = route.params.id
+          await notesService.createNote(state.newNote)
           // NOTE reseting to the empty object resets the input fields
-          // state.newBug = {}
+          // state.newNote = {}
           // eslint-disable-next-line no-undef
-          $('#new-bug-form').modal('hide')
+          $('#new-note-form').modal('hide')
         } catch (error) {
           console.error(error)
         }
       }
     }
-  },
-  components: {}
+  }
+  // components: {} also add a , on the previous line
 }
 </script>
 

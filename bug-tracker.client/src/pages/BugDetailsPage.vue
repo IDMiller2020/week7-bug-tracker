@@ -6,13 +6,29 @@
         <h5>Bug Closed: {{ state.bug.closed }}</h5>
         <p> Id: {{ state.bug.id }}</p>
         <p> Description: {{ state.bug.description }} </p>
-        <p> Reported By: <img :src="state.bug.creator.picture" alt="Creator Image"> {{ state.bug.creator.name }}</p>
-        <button type="button" class="btn btn-danger" @click="closeBug">
-          Close
+        <p> Reported By: {{ state.bug.creator.name }}</p>
+        <button type="button" class="btn btn-outline-danger" @click="closeBug">
+          Close Bug
         </button>
-        <button type="button" class="btn btn-success" @click="createNote">
-          New Note
+        <button title="open create note form" type="button" class="btn btn-outline-success my-4" data-toggle="modal" data-target="#new-note-form">
+          Add Note
         </button>
+        <button title="open edit note form" type="button" class="btn btn-outline-primary my-4" data-toggle="modal" data-target="#edit-note-form">
+          Edit Bug
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div v-for="note in state.activeNotes" :key="note.id">
+              <p id="note">
+                <img id="creator-image" class="w-1 rounded-circle" :src="note.creator.picture" alt="Creator Image"> {{ note.body }}
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -28,18 +44,18 @@ import { notesService } from '../services/NotesService'
 export default {
   name: 'BugDetails',
   setup() {
-    // ROUTE is the current page info
     const route = useRoute()
-    // ROUTER is the toolset of changing routes automatically
     const router = useRouter()
     const state = reactive({
       bug: computed(() => AppState.activeBug),
-      note: computed(() => AppState.notes)
+      notes: computed(() => AppState.notes),
+      activeNotes: computed(() => AppState.activeNotes)
     })
 
     onMounted(async() => {
       try {
         await bugsService.getBugById(route.params.id)
+        await notesService.getNoteByBugId(route.params.id)
       } catch (error) {
         console.error(error)
       }
@@ -51,19 +67,11 @@ export default {
       async closeBug() {
         try {
           await bugsService.closeBug(state.bug.id)
-          // Router is a toolset, here used to change the page after the delete is completed
-          // returning the user to the bugs page
           AppState.activeBug = null
           router.push({ name: 'Home' })
+          Notification.toast('Successfully Closed', 'success')
         } catch (error) {
-          console.error(error)
-        }
-      },
-      async createNote() {
-        try {
-          await notesService.createNote(state.note)
-        } catch (error) {
-          console.error(error)
+          Notification.toast(error, 'error')
         }
       }
     }
@@ -73,5 +81,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.w-1 {
+  width: 2.5rem
+}
 
 </style>
