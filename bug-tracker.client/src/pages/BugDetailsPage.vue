@@ -6,8 +6,8 @@
         <h5>Bug Closed: {{ state.bug.closed }}</h5>
         <p> Id: {{ state.bug.id }}</p>
         <p> Description: {{ state.bug.description }} </p>
-        <p> Reported By: {{ state.bug.creator.name }}</p>
-        <button type="button" class="btn btn-danger" @click="closeeBug">
+        <p> Reported By: <img :src="state.bug.creator.picture" alt="Creator Image"> {{ state.bug.creator.name }}</p>
+        <button type="button" class="btn btn-danger" @click="closeBug">
           Close
         </button>
       </div>
@@ -50,7 +50,7 @@ export default {
           // Router is a toolset, here used to change the page after the delete is completed
           // returning the user to the bugs page
           AppState.activeBug = null
-          router.push({ name: 'Bugs' })
+          router.push({ name: 'Home' })
         } catch (error) {
           console.error(error)
         }

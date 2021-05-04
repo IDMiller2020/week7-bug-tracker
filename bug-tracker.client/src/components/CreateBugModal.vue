@@ -73,7 +73,7 @@ export default {
         try {
           await bugsService.createBug(state.newBug)
           // NOTE reseting to the empty object resets the input fields
-          state.newBug = {}
+          // state.newBug = {}
           // REVIEW CLOSING THE MODAL
           // eslint-disable-next-line no-undef
           $('#new-bug-form').modal('hide')

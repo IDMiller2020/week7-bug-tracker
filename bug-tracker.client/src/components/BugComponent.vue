@@ -5,7 +5,8 @@
       <div class="card shadow">
         <div class="card-body">
           <p class="card-title">
-            {{ bug.title }} | {{ bug.creator.name }} | {{ bug.closed }} | {{ bug.updatedAt }}
+            <!-- FIXME Date Format -->
+            {{ bug.title }} | {{ bug.creator.name }} | {{ bug.closed }} | {{ new Date(bug.updatedAt).toLocaleString() }}
           </p>
         </div>
       </div>

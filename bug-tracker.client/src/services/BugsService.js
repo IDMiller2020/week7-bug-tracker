@@ -18,6 +18,7 @@ class BugsService {
   async createBug(newBug) {
     const res = await api.post('api/bugs', newBug)
     AppState.bugs.push(res.data)
+    console.log(res.data)
     // everytime a bug is created, we will change pages
     router.push({ name: 'BugDetails', params: { id: res.data.id } })
   }
