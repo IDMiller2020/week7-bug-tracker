@@ -10,6 +10,9 @@
         <button type="button" class="btn btn-danger" @click="closeBug">
           Close
         </button>
+        <button type="button" class="btn btn-success" @click="createNote">
+          New Note
+        </button>
       </div>
     </div>
   </div>
@@ -20,6 +23,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { AppState } from '../AppState'
 import { reactive, computed, onMounted } from 'vue'
 import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 
 export default {
   name: 'BugDetails',
@@ -29,8 +33,8 @@ export default {
     // ROUTER is the toolset of changing routes automatically
     const router = useRouter()
     const state = reactive({
-      bug: computed(() => AppState.activeBug)
-
+      bug: computed(() => AppState.activeBug),
+      note: computed(() => AppState.notes)
     })
 
     onMounted(async() => {
@@ -51,6 +55,13 @@ export default {
           // returning the user to the bugs page
           AppState.activeBug = null
           router.push({ name: 'Home' })
+        } catch (error) {
+          console.error(error)
+        }
+      },
+      async createNote() {
+        try {
+          await notesService.createNote(state.note)
         } catch (error) {
           console.error(error)
         }
