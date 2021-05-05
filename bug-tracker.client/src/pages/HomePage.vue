@@ -5,11 +5,13 @@
         <h3 class="pr-4">
           Bug List
         </h3>
-        <!-- FIXME Figure out how to make filter work to show only open or closed bugs -->
-        <button title="show closed bugs" type="button" class="btn btn-outline-success my-4" @click="state.displayClosed = true">
+        <button title="show all bugs" type="button" class="btn btn-outline-warning my-4" @click="state.displayClosed = 0">
+          All Bugs
+        </button>
+        <button title="show closed bugs" type="button" class="btn btn-outline-success my-4 ml-4" @click="state.displayClosed = 1">
           Closed Bugs
         </button>
-        <button title="show open bugs" type="button" class="btn btn-outline-danger my-4 ml-4" @click="state.displayClosed = false">
+        <button title="show open bugs" type="button" class="btn btn-outline-danger my-4 ml-4" @click="state.displayClosed = 2">
           Open Bugs
         </button>
         <button title="open create bug form" type="button" class="btn btn-outline-primary my-4 ml-4" data-toggle="modal" data-target="#new-bug-form">
@@ -17,10 +19,10 @@
         </button>
       </div>
     </div>
-    <div class="row" v-if="state.displayClosed">
+    <div class="row" v-if="state.displayClosed == 1">
       <Bug v-for="bug in state.closedBugs" :key="bug.id" :bug="bug" />
     </div>
-    <div class="row" v-else-if="!state.displayClosed">
+    <div class="row" v-else-if="state.displayClosed == 2">
       <Bug v-for="bug in state.openBugs" :key="bug.id" :bug="bug" />
     </div>
     <div class="row" v-else>
@@ -40,7 +42,7 @@ export default {
       bugs: computed(() => AppState.bugs),
       closedBugs: computed(() => AppState.closedBugs),
       openBugs: computed(() => AppState.openBugs),
-      displayClosed: false
+      displayClosed: 0
     })
     onMounted(async() => {
       try {
@@ -49,10 +51,8 @@ export default {
         console.error(error)
       }
     })
-    const displayOpen = false
     return {
-      state,
-      displayOpen
+      state
     }
   }
 }
