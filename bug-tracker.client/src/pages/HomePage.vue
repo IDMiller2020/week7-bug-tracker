@@ -17,11 +17,14 @@
         </button>
       </div>
     </div>
-    <div class="row" v-if="!displayClosed && !displayOpen">
-      <Bug v-for="bug in state.bugs" :key="bug.id" :bug="bug" />
-    </div>
     <div class="row" v-if="displayClosed">
       <Bug v-for="bug in state.closedBugs" :key="bug.id" :bug="bug" />
+    </div>
+    <div class="row" v-else-if="displayOpen">
+      <Bug v-for="bug in state.closedBugs" :key="bug.id" :bug="bug" />
+    </div>
+    <div class="row" v-else>
+      <Bug v-for="bug in state.bugs" :key="bug.id" :bug="bug" />
     </div>
   </div>
 </template>

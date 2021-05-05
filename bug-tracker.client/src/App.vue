@@ -9,7 +9,7 @@
     <EditBugModal />
   </main>
   <footer>
-    <div class="bg-dark text-light text-center p-4">
+    <div class="bg-dark text-secondary text-center p-4">
       Scott Miller | May 2nd, 2021
     </div>
   </footer>

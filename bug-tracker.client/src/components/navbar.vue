@@ -23,12 +23,12 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link :to="{ name: 'Home' }" class="nav-link">
+          <router-link :to="{ name: 'Home' }" class="nav-link text-secondary">
             Bug Log
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link :to="{ name: 'About' }" class="nav-link">
+          <router-link :to="{ name: 'About' }" class="nav-link text-secondary">
             About
           </router-link>
         </li>
@@ -53,7 +53,7 @@
               height="40"
               class="rounded"
             />
-            <span class="mx-3">{{ user.name }}</span>
+            <span class="mx-3 text-secondary">{{ user.name }}</span>
           </div>
           <div
             class="dropdown-menu p-0 list-group w-100"
@@ -61,12 +61,12 @@
             @click="state.dropOpen = false"
           >
             <router-link :to="{ name: 'Account' }">
-              <div class="list-group-item list-group-item-action hoverable">
+              <div class="list-group-item list-group-item-action hoverable text-light">
                 Account
               </div>
             </router-link>
             <div
-              class="list-group-item list-group-item-action hoverable"
+              class="list-group-item list-group-item-action hoverable text-light"
               @click="logout"
             >
               logout

@@ -12,7 +12,7 @@
         <p> Id: {{ state.bug.id }}</p>
         <p> Description: {{ state.bug.description }} </p>
         <p> Reported By: {{ state.bug.creator.name }}</p>
-        <button v-if="!state.bug.closed"
+        <button v-if="!state.bug.closed && state.user.isAuthenticated"
                 title="open create note form"
                 type="button"
                 class="btn btn-outline-success my-4"
@@ -21,7 +21,8 @@
         >
           Add Note
         </button>
-        <button v-if="!state.bug.closed && state.account.id == state.bug.creatorId"
+        <!-- FIXME Edit Bug and Close Bug are showing up when not logged in -->
+        <button v-if="!state.bug.closed && state.account.id == state.bug.creatorId && state.user.isAuthenticated"
                 title="open edit note form"
                 type="button"
                 class="btn btn-outline-primary my-4 ml-4"
@@ -30,7 +31,7 @@
         >
           Edit Bug
         </button>
-        <button v-if="!state.bug.closed" type="button" class="btn btn-outline-danger ml-4" @click="closeBug">
+        <button v-if="!state.bug.closed && state.user.isAuthenticated" type="button" class="btn btn-outline-danger ml-4" @click="closeBug">
           Close Bug
         </button>
       </div>
@@ -70,7 +71,8 @@ export default {
       activeBug: computed(() => AppState.activeBug),
       notes: computed(() => AppState.notes),
       activeNotes: computed(() => AppState.activeNotes),
-      account: computed(() => AppState.account)
+      account: computed(() => AppState.account),
+      user: computed(() => AppState.user)
     })
 
     onMounted(async() => {

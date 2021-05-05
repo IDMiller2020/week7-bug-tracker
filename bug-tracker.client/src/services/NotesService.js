@@ -8,6 +8,7 @@ class NotesService {
   }
 
   async createNote(body) {
+    await api.post('api/notes', body)
     this.getNoteByBugId(body.bugId)
   }
 

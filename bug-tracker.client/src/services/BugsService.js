@@ -2,7 +2,6 @@ import { AppState } from '../AppState.js'
 import router from '../router'
 import { api } from './AxiosService.js'
 import Notification from '../utils/Notification'
-import { logger } from '../utils/Logger.js'
 
 class BugsService {
   async getBugs() {
