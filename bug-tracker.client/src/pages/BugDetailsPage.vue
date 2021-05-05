@@ -89,10 +89,12 @@ export default {
       state,
       async closeBug() {
         try {
-          await bugsService.closeBug(state.bug.id)
-          AppState.activeBug = null
-          router.push({ name: 'Home' })
-          Notification.toast('Successfully Closed', 'success')
+          if (await Notification.confirmAction('Are you sure you want to close this Bug?', "You won't be able to revert this.", 'warning', 'Yes, close it!')) {
+            await bugsService.closeBug(state.bug.id)
+            AppState.activeBug = null
+            router.push({ name: 'Home' })
+            Notification.toast('Successfully Closed', 'success')
+          }
         } catch (error) {
           Notification.toast(error, 'error')
         }

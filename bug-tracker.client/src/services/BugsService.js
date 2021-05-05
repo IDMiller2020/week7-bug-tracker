@@ -24,7 +24,6 @@ class BugsService {
   }
 
   async closeBug(id) {
-    Notification.confirmAction('Are you sure you want to close this Bug?', "You won't be able to revert this.", 'warning', 'Yes, close it!')
     await api.delete('api/bugs/' + id)
   }
 
