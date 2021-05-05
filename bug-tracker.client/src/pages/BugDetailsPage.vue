@@ -3,31 +3,49 @@
     <div class="row bug-details">
       <div class="col-12" v-if="state.bug">
         <h3>{{ state.bug.title }}</h3>
-        <h5>Bug Closed: {{ state.bug.closed }}</h5>
+        <h5 class="text-danger" v-if="!state.bug.closed">
+          Bug Closed: {{ state.bug.closed }}
+        </h5>
+        <h5 class="text-success" v-if="state.bug.closed">
+          Bug Closed: {{ state.bug.closed }}
+        </h5>
         <p> Id: {{ state.bug.id }}</p>
         <p> Description: {{ state.bug.description }} </p>
         <p> Reported By: {{ state.bug.creator.name }}</p>
-        <button type="button" class="btn btn-outline-danger" @click="closeBug">
-          Close Bug
-        </button>
-        <button title="open create note form" type="button" class="btn btn-outline-success my-4" data-toggle="modal" data-target="#new-note-form">
+        <button v-if="!state.bug.closed"
+                title="open create note form"
+                type="button"
+                class="btn btn-outline-success my-4"
+                data-toggle="modal"
+                data-target="#new-note-form"
+        >
           Add Note
         </button>
-        <button title="open edit note form" type="button" class="btn btn-outline-primary my-4" data-toggle="modal" data-target="#edit-note-form">
+        <button v-if="!state.bug.closed && state.account.id == state.bug.creatorId"
+                title="open edit note form"
+                type="button"
+                class="btn btn-outline-primary my-4 ml-4"
+                data-toggle="modal"
+                data-target="#edit-bug-form"
+        >
           Edit Bug
+        </button>
+        <button v-if="!state.bug.closed" type="button" class="btn btn-outline-danger ml-4" @click="closeBug">
+          Close Bug
         </button>
       </div>
     </div>
     <div class="row">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <div v-for="note in state.activeNotes" :key="note.id">
-              <p id="note">
+          <div v-for="note in state.activeNotes" :key="note.id">
+            <li class="list-group-item">
+              <p id="note" v-if="note.creator">
                 <img id="creator-image" class="w-1 rounded-circle" :src="note.creator.picture" alt="Creator Image"> {{ note.body }}
+                <i class="fas fa-trash" @click="deleteNote(note.id)" v-if="state.account.id == note.creatorId"></i>
               </p>
-            </div>
-          </li>
+            </li>
+          </div>
         </ul>
       </div>
     </div>
@@ -40,6 +58,7 @@ import { AppState } from '../AppState'
 import { reactive, computed, onMounted } from 'vue'
 import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
+import Notification from '../utils/Notification'
 
 export default {
   name: 'BugDetails',
@@ -48,8 +67,10 @@ export default {
     const router = useRouter()
     const state = reactive({
       bug: computed(() => AppState.activeBug),
+      activeBug: computed(() => AppState.activeBug),
       notes: computed(() => AppState.notes),
-      activeNotes: computed(() => AppState.activeNotes)
+      activeNotes: computed(() => AppState.activeNotes),
+      account: computed(() => AppState.account)
     })
 
     onMounted(async() => {
@@ -70,6 +91,16 @@ export default {
           AppState.activeBug = null
           router.push({ name: 'Home' })
           Notification.toast('Successfully Closed', 'success')
+        } catch (error) {
+          Notification.toast(error, 'error')
+        }
+      },
+      async deleteNote(noteId) {
+        try {
+          if (await Notification.confirmAction('Are you sure you want to delete this note?', "You won't be able to revert this.", 'warning', 'Yes, delete it!')) {
+            await notesService.deleteNote(noteId)
+            Notification.toast('Successfully Deleted', 'success')
+          }
         } catch (error) {
           Notification.toast(error, 'error')
         }

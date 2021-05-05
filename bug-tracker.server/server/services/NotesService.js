@@ -2,6 +2,9 @@ import { dbContext } from '../db/DbContext'
 import { BadRequest } from '../utils/Errors'
 
 class NotesService {
+  async delete(noteId, creatorId) {
+    return await dbContext.Notes.findOneAndDelete({ _id: noteId, creatorId: creatorId })
+  }
   // async getAll(bugId) {
   //   return await dbContext.Notes.findById(bugId)
   // }

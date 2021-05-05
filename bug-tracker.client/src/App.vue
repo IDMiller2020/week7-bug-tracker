@@ -6,6 +6,7 @@
     <router-view />
     <CreateBugModal />
     <CreateNoteModal />
+    <EditBugModal />
   </main>
   <footer>
     <div class="bg-dark text-light text-center p-4">
@@ -19,10 +20,12 @@ import { computed } from 'vue'
 import { AppState } from './AppState'
 import CreateBugModal from './components/CreateBugModal'
 import CreateNoteModal from './components/CreateNoteModal'
+import EditBugModal from './components/EditBugModal'
 export default {
   components: {
     CreateBugModal,
-    CreateNoteModal
+    CreateNoteModal,
+    EditBugModal
   },
   name: 'App',
   setup() {

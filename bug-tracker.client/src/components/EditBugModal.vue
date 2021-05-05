@@ -16,18 +16,17 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form @submit.prevent="createBug">
+        <form @submit.prevent="editBug">
           <div class="modal-body">
             <div class="form-group">
-              <label for="make">Title</label>
+              <label for="title">Title</label>
               <input type="text"
                      class="form-control"
                      id="title"
                      placeholder="title..."
                      minLength="3"
                      maxlength="25"
-                     v-model="state.newBug.title"
-                     required
+                     v-model="state.editedBug.title"
               >
               <div class="form-group">
                 <label for="description">Description</label>
@@ -37,8 +36,7 @@
                        placeholder="Description..."
                        minlength="3"
                        maxlength="75"
-                       v-model="state.newBug.description"
-                       required
+                       v-model="state.editedBug.description"
                 >
               </div>
             </div>
@@ -47,7 +45,7 @@
                 Close
               </button>
               <button type="submit" class="btn btn-primary">
-                Create
+                Edit
               </button>
             </div>
           </div>
@@ -61,21 +59,25 @@
 import { reactive } from 'vue'
 import { bugsService } from '../services/BugsService'
 import $ from 'jquery'
+import { useRoute } from 'vue-router'
 export default {
   name: 'Component',
   setup() {
+    const route = useRoute()
     const state = reactive({
-      newBug: {}
+      editedBug: {}
     })
     return {
       state,
-      async createBug() {
+      async editBug() {
         try {
-          await bugsService.createBug(state.newBug)
+          // FIXME The modal won't close after I click the edit button
+          state.editedBug.bugId = route.params.id
+          await bugsService.editBug(state.editedBug)
           // NOTE reseting to the empty object resets the input fields
           // state.newBug = {}
           // eslint-disable-next-line no-undef
-          $('#new-bug-form').modal('hide')
+          $('#edit-bug-form').modal('hide')
         } catch (error) {
           console.error(error)
         }

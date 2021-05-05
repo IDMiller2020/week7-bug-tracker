@@ -9,6 +9,7 @@ export class NotesController extends BaseController {
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.create)
+      .delete('/:id', this.delete)
   }
 
   // NOTE getNotesByBugId is in the BugsController so that we can get all notes for a specific bug.
@@ -18,6 +19,16 @@ export class NotesController extends BaseController {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorId = req.userInfo.id
       const data = await notesService.create(req.body)
+      res.send(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async delete(req, res, next) {
+    try {
+      req.body.creatorId = req.userInfo.id
+      const data = await notesService.delete(req.params.id, req.userInfo.id)
       res.send(data)
     } catch (error) {
       next(error)
